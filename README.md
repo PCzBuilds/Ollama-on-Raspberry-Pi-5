@@ -2,7 +2,7 @@
 
 Running [Ollama](https://ollama.com) locally on a Raspberry Pi 5, with models stored on an external SSD instead of the SD card, running fully offline and CPU-only.
 
-This repo documents the real process — including the mistakes made along the way and how they were diagnosed. The troubleshooting is arguably the most useful part; most quick-start guides skip it entirely.
+This repo documents the process including the mistakes made along the way and how they were diagnosed. The troubleshooting is arguably the most useful part; most quick-start guides skip it entirely.
 
 **Why:** this is the foundation for a follow-up project: an LLM-driven SSH honeypot for defensive security research (see [Roadmap](#roadmap)).
 
@@ -174,12 +174,6 @@ vcgencmd get_throttled
 3. "Active (running)" doesn't mean a config change took effect — verify the actual applied setting, not just service status.
 4. Small formatting mistakes (a merged line, a mistyped UUID) produce confusing errors; reading the raw file/log content directly is the fastest path to diagnosing them.
 5. Measure real-world performance instead of assuming — `vcgencmd get_throttled` turns "feels slow" into either a confirmed hardware limit or a ruled-out one.
-
-## Roadmap
-
-- [ ] LLM-driven SSH honeypot (Cowrie + Ollama) generating dynamic fake shell responses to attacker input
-- [ ] Offline log-summarization pass using a larger local model (`mistral:7b`), mapping captured sessions to MITRE ATT&CK
-- [ ] Write-up + repo for the above
 
 ## License
 
