@@ -4,7 +4,7 @@ Running [Ollama](https://ollama.com) locally on a Raspberry Pi 5, with models st
 
 This repo documents the process including the mistakes made along the way and how they were diagnosed. The troubleshooting is arguably the most useful part; most quick-start guides skip it entirely.
 
-**Why:** this is the foundation for a follow-up project: an LLM-driven SSH honeypot for defensive security research (see [Roadmap](#roadmap)).
+**Why:** this is the foundation for follow-up projects.
 
 ## Hardware & Software Used
 
@@ -16,17 +16,7 @@ This repo documents the process including the mistakes made along the way and ho
 | Runtime | Ollama (official install script) |
 | First model | `gemma3:1b` |
 
-## Repository Structure
 
-```
-.
-├── README.md
-├── LICENSE
-└── scripts/
-    ├── 01-format-mount-ssd.sh       # Format & permanently mount external SSD
-    ├── 02-install-ollama.sh         # Download + review + install Ollama
-    ├── 03-configure-model-storage.sh # Point Ollama at the SSD via systemd
-    └── verify-setup.sh              # Confirm mount, service, and env are correct
 ```
 
 The scripts are the cleaned-up, parameterized versions of the exact commands used below, meant to be read before running, not blindly executed. Each has comments explaining what it does and why.
