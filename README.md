@@ -2,9 +2,7 @@
 
 Running [Ollama](https://ollama.com) locally on a Raspberry Pi 5, with models stored on an external SSD instead of the SD card, running fully offline and CPU-only.
 
-This repo documents the process including the mistakes made along the way and how they were diagnosed. The troubleshooting is arguably the most useful part; most quick-start guides skip it entirely.
-
-**Why:** this is the foundation for follow-up projects.
+This repo documents the real process — including the mistakes made along the way and how they were diagnosed. The troubleshooting is arguably the most useful part; most quick-start guides skip it entirely.
 
 ## Hardware & Software Used
 
@@ -16,10 +14,20 @@ This repo documents the process including the mistakes made along the way and ho
 | Runtime | Ollama (official install script) |
 | First model | `gemma3:1b` |
 
+## Repository Structure
 
 ```
+.
+├── README.md
+├── LICENSE
+└── scripts/
+    ├── 01-format-mount-ssd.sh        # Format & permanently mount external SSD
+    ├── 02-install-ollama.sh          # Download + review + install Ollama
+    ├── 03-configure-model-storage.sh # Point Ollama at the SSD via systemd
+    └── verify-setup.sh               # Confirm mount, service, and env are correct
+```
 
-The scripts are the cleaned-up, parameterized versions of the exact commands used below, meant to be read before running, not blindly executed. Each has comments explaining what it does and why.
+The scripts are the cleaned-up, parameterized versions of the exact commands used below — meant to be read before running, not blindly executed. Each has comments explaining what it does and why.
 
 ## Usage
 
@@ -47,7 +55,7 @@ ollama run gemma3:1b
 
 ### 1. Preparing the external SSD
 
-The Pi needs somewhere to store models that isn't the SD card: model files run from hundreds of MB to several GB each, and SD cards are slow and wear out under repeated writes.
+The Pi needs somewhere to store models that isn't the SD card — model files run from hundreds of MB to several GB each, and SD cards are slow and wear out under repeated writes.
 
 Checking what's connected:
 ```bash
@@ -148,18 +156,18 @@ ls -lh /mnt/ssd/llm_data
 # blobs/  manifests/   (owned by ollama:ollama)
 ```
 
-**Benchmark:** prompt *"Explain what a Raspberry Pi is in two sentences"* returned in **7.4 seconds** for a ~65-word answer, roughly **10-12 tokens/second**. Published benchmarks for `gemma3:1b` on a Pi 5 report closer to 18-22 t/s; to rule out thermal throttling as the cause:
+**Benchmark:** prompt *"Explain what a Raspberry Pi is in two sentences"* returned in **7.4 seconds** for a ~65-word answer — roughly **10-12 tokens/second**. Published benchmarks for `gemma3:1b` on a Pi 5 report closer to 18-22 t/s; to rule out thermal throttling as the cause:
 
 ```bash
 vcgencmd get_throttled
 # throttled=0x0
 ```
 
-`0x0` confirms zero throttling: the gap is most likely cooling setup or background load differences from whatever environment those published numbers came from, not a fault in this configuration.
+`0x0` confirms zero throttling — the gap is most likely cooling setup or background load differences from whatever environment those published numbers came from, not a fault in this configuration.
 
 ## Lessons Learned
 
-1. Mount external storage using UUIDs, not device paths. Device names can shift.
+1. Mount external storage using UUIDs, not device paths — device names can shift.
 2. Systemd services don't inherit your shell's environment variables — a very common mistake with `.bashrc` exports.
 3. "Active (running)" doesn't mean a config change took effect — verify the actual applied setting, not just service status.
 4. Small formatting mistakes (a merged line, a mistyped UUID) produce confusing errors; reading the raw file/log content directly is the fastest path to diagnosing them.
